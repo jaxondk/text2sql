@@ -2,6 +2,26 @@
 
 Text2SQL is an application that converts natural language queries into SQL, executes them against a database, and returns the results.
 
+## TODO
+- [ ] Improve Tracing
+   - [ ] Expand the screen to take over and fill most of the screen
+   - [ ] Tables tab should show the relevant tables, not all the tables
+   - [ ] When reasoning is one line, it's really annoying. Maybe make a max width or something?
+   - [ ] I'd really prefer a setup where it's more of an actual trace, where it shows the steps to get to the result in the order they happen. 
+- [ ] Fix the settings page
+   - [ ] Desired settings options
+      - [ ] SQL DB settings
+         - [ ] List of available databases, which db you're using and a way to add a database.
+      - [ ] Vector DB Settings
+         - [ ] List of available databases, which db you're using and a way to add a database. 
+      - [ ] Model Settings
+         - [ ] Available models and which model you're using. 
+            - [ ] Later: add an endpoint. Perhaps good way to learn LiteLLM
+         - [ ] max number of times the LLM retries
+   - [ ] Persistent storage for settings
+- [ ] Loading screen when first connect to get embedding model and other stuff loaded
+
+
 ## Features
 
 - Natural language to SQL conversion using configurable LLM providers
