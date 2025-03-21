@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text2SQL - Convert natural language to SQL</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Text2SQL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">Settings</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="databaseDropdown" 
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="selectedDatabase">Select Database</span>
+                        </button>
+                        <ul class="dropdown-menu" id="databaseList" aria-labelledby="databaseDropdown">
+                            <li><a class="dropdown-item" href="#">Loading...</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="llmDropdown" 
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="selectedLLM">Select LLM</span>
+                        </button>
+                        <ul class="dropdown-menu" id="llmList" aria-labelledby="llmDropdown">
+                            <li><a class="dropdown-item" href="#">Loading...</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <div class="row">
+            <!-- Chat and Input -->
+            <div class="col-md-6">
+                <div class="card chat-container">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Chat</h5>
+                    </div>
+                    <div class="card-body" id="chatMessages">
+                        <div class="system-message">
+                            Welcome to Text2SQL! Ask me a question about your data in plain English, and I'll convert it to SQL.
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <form id="queryForm" class="d-flex">
+                            <input type="text" id="queryInput" class="form-control me-2" 
+                                   placeholder="Enter your query in plain English..." required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tracing Widget -->
+            <div class="col-md-6">
+                <div class="card trace-container">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Tracing</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="traceTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="reasoning-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#reasoning" type="button" role="tab" aria-selected="true">
+                                    Reasoning
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="schemas-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#schemas" type="button" role="tab" aria-selected="false">
+                                    Tables
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="sql-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#sql" type="button" role="tab" aria-selected="false">
+                                    SQL
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="result-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#result" type="button" role="tab" aria-selected="false">
+                                    Result
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content p-3" id="traceTabContent">
+                            <div class="tab-pane fade show active" id="reasoning" role="tabpanel">
+                                <pre><code id="reasoningContent">No data available</code></pre>
+                            </div>
+                            <div class="tab-pane fade" id="schemas" role="tabpanel">
+                                <div id="schemasContent">No data available</div>
+                            </div>
+                            <div class="tab-pane fade" id="sql" role="tabpanel">
+                                <pre><code id="sqlContent">No data available</code></pre>
+                                <button id="runSqlButton" class="btn btn-sm btn-success mt-2" style="display: none;">
+                                    <i class="bi bi-play"></i> Run SQL
+                                </button>
+                            </div>
+                            <div class="tab-pane fade" id="result" role="tabpanel">
+                                <div id="resultContent">No data available</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html> 
