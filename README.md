@@ -36,7 +36,7 @@ Text2SQL is an application that converts natural language queries into SQL, exec
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.11+
 - Docker (for containerized deployment)
 
 ### Installation
@@ -47,7 +47,7 @@ git clone https://github.com/yourusername/text2sql.git
 cd text2sql
 ```
 
-2. Install dependencies:
+2. Install dependencies (Recommend doing so in a virtual env):
 ```bash
 pip install -r requirements.txt
 ```
