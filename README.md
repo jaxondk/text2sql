@@ -4,10 +4,11 @@ Text2SQL is an application that converts natural language queries into SQL, exec
 
 ## TODO
 - [ ] Improve Tracing
-   - [ ] Expand the screen to take over and fill most of the screen
-   - [ ] Tables tab should show the relevant tables, not all the tables
+   - [ ] I'd really prefer a setup where it's more of an actual trace, where it shows the steps to get to the result in the order they happen.
+   - [X] Disable horizontal scrolling in the reasoning window, and instead wrap the text to always fit in the view. Vertical scrolling is good. 
+   - [ ] Put a button in the tracing window to expand the tracing screen to take over and fill most of the screen. The expanded tracing window should have a way to close it, which returns the state to the default two window view.
+   - [ ] Tables tab should show the relevant tables from retrieval step, not all the tables
    - [ ] When reasoning is one line, it's really annoying. Maybe make a max width or something?
-   - [ ] I'd really prefer a setup where it's more of an actual trace, where it shows the steps to get to the result in the order they happen. 
 - [ ] Fix the settings page
    - [ ] Desired settings options
       - [ ] SQL DB settings
@@ -19,7 +20,7 @@ Text2SQL is an application that converts natural language queries into SQL, exec
             - [ ] Later: add an endpoint. Perhaps good way to learn LiteLLM
          - [ ] max number of times the LLM retries
    - [ ] Persistent storage for settings
-- [ ] Loading screen when first connect to get embedding model and other stuff loaded
+- [X] Loading screen when first connect to get embedding model and other stuff loaded
 
 
 ## Features

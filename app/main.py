@@ -10,6 +10,8 @@ import logging
 from app.api.router import api_router
 from app.web.router import web_router
 from app.db.manager import DatabaseManager
+from app.utils.vector_store import get_vector_store
+from app.core.state import app_state
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -51,10 +53,21 @@ async def startup_event():
         # Initialize default database connection
         db_manager = DatabaseManager()
         await db_manager.initialize_default_database()
+
+        # Initialize the vector store
+        logger.info("Initializing embedding model and vector store...")
+        vector_store = get_vector_store()
+        logger.info("Vector store initialization complete")
+
+        # Mark loading as complete
+        app_state["is_loading"] = False
+
         logger.info("Application initialized successfully")
     except Exception as e:
         # Log the error but let the application start anyway
         logger.error(f"Error during application initialization: {str(e)}")
+        app_state["is_loading"] = False
+        app_state["loading_error"] = str(e)
         logger.info(
             "Application will continue to start but some features may be limited"
         )

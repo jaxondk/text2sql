@@ -6,6 +6,7 @@ from app.db.manager import DatabaseManager
 from app.llm.manager import LLMManager
 from app.core.models import QueryResponse, TraceData, TableSchema, QueryResult
 from app.utils.db_utils import execute_sql
+from app.utils.vector_store import get_vector_store
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +25,7 @@ class Text2SQLProcessor:
         """Initialize vector store if it hasn't been initialized yet"""
         if self.vector_store is None:
             try:
-                from app.utils.vector_store import VectorStore
-
-                self.vector_store = VectorStore()
+                self.vector_store = get_vector_store()
                 return True
             except Exception as e:
                 logger.error(f"Failed to initialize vector store: {str(e)}")

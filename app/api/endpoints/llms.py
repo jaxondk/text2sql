@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
 from app.llm.manager import LLMManager
+from app.core.state import app_state
 
 router = APIRouter()
+
 
 class LLMInfo(BaseModel):
     id: str
@@ -14,6 +16,7 @@ class LLMInfo(BaseModel):
     description: Optional[str] = None
     config: Dict[str, Any] = {}
 
+
 class LLMConfigRequest(BaseModel):
     name: str
     provider: str
@@ -21,6 +24,7 @@ class LLMConfigRequest(BaseModel):
     description: Optional[str] = None
     api_key: Optional[str] = None
     config: Dict[str, Any] = {}
+
 
 @router.get("/", response_model=List[LLMInfo])
 async def list_llms():
@@ -33,6 +37,7 @@ async def list_llms():
         return llms
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/", response_model=LLMInfo)
 async def add_llm(request: LLMConfigRequest):
@@ -47,19 +52,20 @@ async def add_llm(request: LLMConfigRequest):
             model=request.model,
             description=request.description,
             api_key=request.api_key,
-            config=request.config
+            config=request.config,
         )
-        
+
         return {
             "id": llm_id,
             "name": request.name,
             "provider": request.provider,
             "model": request.model,
             "description": request.description,
-            "config": request.config
+            "config": request.config,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/providers", response_model=List[str])
 async def list_providers():
@@ -73,6 +79,7 @@ async def list_providers():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.delete("/{llm_id}")
 async def remove_llm(llm_id: str):
     """
@@ -85,4 +92,12 @@ async def remove_llm(llm_id: str):
             raise HTTPException(status_code=404, detail="LLM not found")
         return {"status": "success"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/status")
+async def get_app_status():
+    """
+    Get the application loading status
+    """
+    return {"status": app_state}

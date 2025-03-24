@@ -16,6 +16,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const databaseList = document.getElementById('databaseList');
     const selectedLLM = document.getElementById('selectedLLM');
     const llmList = document.getElementById('llmList');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingError = document.getElementById('loadingError');
+    
+    // Check application initialization status
+    async function checkAppStatus() {
+        try {
+            const response = await fetch('/api/llms/status');
+            const data = await response.json();
+            
+            if (!data.status.is_loading) {
+                // Hide loading overlay
+                loadingOverlay.style.display = 'none';
+                
+                // Show error if there was one
+                if (data.status.loading_error) {
+                    console.error('Initialization error:', data.status.loading_error);
+                    addMessage(`Warning: There was an error during initialization: ${data.status.loading_error}`, 'system');
+                }
+            } else {
+                // Check again in 1 second
+                setTimeout(checkAppStatus, 1000);
+            }
+        } catch (e) {
+            console.error('Error checking app status:', e);
+            loadingError.textContent = 'Error connecting to server. Please refresh the page.';
+            loadingError.style.display = 'block';
+        }
+    }
     
     // Try to restore session state
     try {
@@ -408,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Initialize
+    checkAppStatus();
     loadDatabases();
     loadLLMs();
 }); 

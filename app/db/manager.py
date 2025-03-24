@@ -6,6 +6,7 @@ from typing import List, Dict, Any, Optional
 
 from app.db.adapters import get_db_adapter
 from app.core.models import DatabaseInfo, TableSchema
+from app.utils.vector_store import get_vector_store
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +31,7 @@ class DatabaseManager:
         """Initialize vector store if it hasn't been initialized yet"""
         if self.vector_store is None:
             try:
-                from app.utils.vector_store import VectorStore
-
-                self.vector_store = VectorStore()
+                self.vector_store = get_vector_store()
                 return True
             except Exception as e:
                 logger.error(f"Failed to initialize vector store: {str(e)}")
@@ -178,10 +177,36 @@ class DatabaseManager:
         """
         configs = self._load_configs()
         if configs:
-            logger.info(
-                "Database connections already exist, skipping default initialization"
-            )
-            return configs[0]["id"]
+            logger.info("Database connections already exist")
+
+            # Get the first database connection and index its tables
+            db_id = configs[0]["id"]
+            logger.info(f"Reindexing tables for database {db_id}")
+
+            try:
+                # Get the database adapter
+                config = self._get_config_by_id(db_id)
+                if not config:
+                    logger.error(f"Database config not found for ID: {db_id}")
+                    return db_id
+
+                # Get the adapter
+                adapter = get_db_adapter(config["type"], config["connection_string"])
+
+                # Get the schemas
+                logger.info("Getting table schemas...")
+                schemas = await adapter.get_table_schemas()
+                logger.info(f"Found {len(schemas)} tables")
+
+                # Index the schemas
+                if await self._init_vector_store() and self.vector_store:
+                    logger.info("Indexing tables in vector store...")
+                    await self.vector_store.index_tables(db_id, schemas)
+                    logger.info("Tables indexed successfully")
+            except Exception as e:
+                logger.error(f"Error reindexing tables: {str(e)}")
+
+            return db_id
 
         logger.info("No database connections found, initializing default connection")
 

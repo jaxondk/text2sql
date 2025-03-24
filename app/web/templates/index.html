@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-message">Initializing application and downloading embedding model...</div>
+        <div id="loadingError" class="loading-error" style="display: none;"></div>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="/">Text2SQL</a>
@@ -111,7 +118,7 @@
                         </ul>
                         <div class="tab-content p-3" id="traceTabContent">
                             <div class="tab-pane fade show active" id="reasoning" role="tabpanel">
-                                <pre><code id="reasoningContent">No data available</code></pre>
+                                <pre id="reasoningContent" class="wrap-text" style="white-space: pre-wrap; overflow-x: hidden;">No data available</pre>
                             </div>
                             <div class="tab-pane fade" id="schemas" role="tabpanel">
                                 <div id="schemasContent">No data available</div>
